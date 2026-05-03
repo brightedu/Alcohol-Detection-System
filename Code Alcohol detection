@@ -1,0 +1,45 @@
+#define MQ3_PIN A0
+#define BUZZER 8
+#define GREEN_LED 6
+#define RED_LED 7
+
+int sensorValue = 0;
+int threshold = 400;
+
+void setup() {
+  Serial.begin(9600);
+
+  pinMode(MQ3_PIN, INPUT);   // 🔹 Added sensor as INPUT
+  pinMode(BUZZER, OUTPUT);
+  pinMode(GREEN_LED, OUTPUT);
+  pinMode(RED_LED, OUTPUT);
+
+  Serial.println("=== MQ3 Alcohol Detection System ===");
+  Serial.println("Warming up sensor...");
+  
+  delay(20000); // Warm-up time
+  Serial.println("System Ready!");
+}
+
+void loop() {
+  sensorValue = analogRead(MQ3_PIN);
+
+  Serial.print("MQ3 Value: ");
+  Serial.print(sensorValue);
+
+  if (sensorValue > threshold) {
+    digitalWrite(RED_LED, HIGH);
+    digitalWrite(GREEN_LED, LOW);
+    digitalWrite(BUZZER, HIGH);
+
+    Serial.println(" --> ALCOHOL DETECTED!");
+  } else {
+    digitalWrite(RED_LED, LOW);
+    digitalWrite(GREEN_LED, HIGH);
+    digitalWrite(BUZZER, LOW);
+
+    Serial.println(" --> SAFE");
+  }
+
+  delay(500);
+}
